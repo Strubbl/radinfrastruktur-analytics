@@ -105,7 +105,7 @@ class OsmCalc():
                                      quoting=csv.QUOTE_MINIMAL)
             spamwriter.writerow(data)
 
-cities=[{"city:": "Hamburg"}]            
+cities=[{"city": "Hamburg"}]            
             
 o = OsmCalc()
 
