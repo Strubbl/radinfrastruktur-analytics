@@ -11,10 +11,37 @@ class Plotter():
         fig = plt.figure(figsize=(1.1*6.25984252,height_scale*3.12992126))
         ax1 = fig.add_subplot(1, 1, 1)
         ax1.axhline(np.mean(y), color='black', linewidth=1.4)
+        print(title)
+        print("Durchschnitt: "+str(np.mean(y)))
+        print("Max: "+str(max(y)))
+        print("Min: "+str(min(y)))
         plt.bar(x, y, line_width, color=color)
         ax1.grid(which='major', axis='y', linewidth=0.71, linestyle='-', color='0.75')
         ax1.set_axisbelow(True)
         plt.title(title)
+        if plot_y is not False:
+            h=plt.ylabel(plot_y)
+        fig.tight_layout()
+        if rotate_x:
+            plt.xticks(rotation=45, ha="right")
+            plt.subplots_adjust(bottom=margin)
+        if fully_rotate_x:
+            plt.xticks(rotation=90, ha="center")
+            plt.subplots_adjust(bottom=margin)
+        plt.show()
+
+    def plotDoubleBar(self, x, y1, y2, title, labels, color=(0.2,0.4,0.9,1), plot_y=False, line_width=1, rotate_x=False, fully_rotate_x=False, margin=0.5, height_scale=1.1):
+        fig = plt.figure(figsize=(1.1*6.25984252,height_scale*3.12992126))
+        ax1 = fig.add_subplot(1, 1, 1)
+        rects1 = ax1.bar( np.arange(len(x)) - line_width/2, y1, line_width, label=labels[0], color=(0.2,0.4,0.9,1))
+        rects2 = ax1.bar(np.arange(len(x)) + line_width/2, y2, line_width, label=labels[1], color="#e69900")
+        print(title)
+        ax1.grid(which='major', axis='y', linewidth=0.71, linestyle='-', color='0.75')
+        ax1.set_axisbelow(True)
+        plt.title(title)
+        ax1.set_xticks(range(len(x)))
+        ax1.set_xticklabels(x)
+        ax1.legend()
         if plot_y is not False:
             h=plt.ylabel(plot_y)
         fig.tight_layout()
@@ -110,7 +137,7 @@ class Reader():
 r = Reader("data/cities.csv")
 
 class Statistics():
-    def byEdgelength(self):
+    def byRatio(self):
         y1, y2, y3, _ = r.getData()
         cf, cb, cs = r.getCities()
 
@@ -153,7 +180,99 @@ class Statistics():
                 colors.append((1,1,1,1))
         pl.plotBar(y3.keys(),list(y3.values()), "Verhältnis der durchschn. Strassenlänge - Rad zu Auto", plot_y="r_avrg [-]", rotate_x=True, color=colors, line_width=0.8, margin=0.4)
 
+    def byDensity(self):
+        cf, cb, cs = r.getCities()
+        data = r.data
+        y1 = {}
+        for city in cf+cb+cs:
+            bike = data.loc[data['Stadt'] == city+", Bike"]
+            y1[city]=float(bike["Strassendichte m/km2"])
+
+        colors = []
+        y1={k: v for k, v in sorted(y1.items(), key=lambda item: item[1])}
+        for key in y1:
+            if key in cf:
+                colors.append((0.9,0.6,0,1))
+            elif key in cb:
+                colors.append((0.2,0.4,0.9,1))
+            elif key in cs:
+                colors.append((0,0.7,0.1,1))
+            else:
+                colors.append((1,1,1,1))
+        pl.plotBar(y1.keys(),list(y1.values()), "Strassendichte - Rad", plot_y="d_edge [m/km^2]", rotate_x=True, color=colors, line_width=0.8, margin=0.4)
+
+        for city in cf+cb+cs:
+            car = data.loc[data['Stadt'] == city+", Car"]
+            y1[city]=float(car["Strassendichte m/km2"])
+
+        colors = []
+        y1={k: v for k, v in sorted(y1.items(), key=lambda item: item[1])}
+        for key in y1:
+            if key in cf:
+                colors.append((0.9,0.6,0,1))
+            elif key in cb:
+                colors.append((0.2,0.4,0.9,1))
+            elif key in cs:
+                colors.append((0,0.7,0.1,1))
+            else:
+                colors.append((1,1,1,1))
+        pl.plotBar(y1.keys(),list(y1.values()), "Strassendichte - Auto", plot_y="d_edge [m/km^2]", rotate_x=True, color=colors, line_width=0.8, margin=0.4)
+
+    def byTotalLength(self):
+        data=r.data
+        cf, cb, cs = r.getCities()
+        y1=[]
+        y2={}
+
+        for city in cf+cb+cs:
+            car = data.loc[data['Stadt'] == city+", Car"]
+            y2[city]=float(car["Länge total in m"])/1000
+
+        y2={k: v for k, v in sorted(y2.items(), key=lambda item: item[1])}
+
+        for city in y2.keys():
+            bike = data.loc[data['Stadt'] == city+", Bike"]
+            y1.append(float(bike["Länge total in m"])/1000)
+
+        pl.plotDoubleBar(y2.keys(),list(y2.values()), y1, "Ungerichtete Kantenlänge", ["Auto", "Rad"], plot_y="l_total [km]", rotate_x=True, line_width=0.4, margin=0.4)
+
+    def byBikeLength(self):
+        data=r.data
+        cf, cb, cs = r.getCities()
+        y1=[]
+        y2={}
+
+        for city in cf+cb+cs:
+            bike = data.loc[data['Stadt'] == city+", Bike"]
+            y2[city]=float(bike["Länge total in m"])/1000
+
+        y2={k: v for k, v in sorted(y2.items(), key=lambda item: item[1])}
+
+        for city in y2.keys():
+            bike = data.loc[data['Stadt'] == city+", Bike"]
+            y1.append(float(bike["Länge einzeln in m"])/1000)
+
+        pl.plotDoubleBar(y2.keys(),list(y2.values()), y1, "Kanten- und Strassenlänge", ["Kantenlänge", "Strassenlänge"], plot_y="l [km]", rotate_x=True, line_width=0.4, margin=0.4)
+
+    def byCarLength(self):
+        data=r.data
+        cf, cb, cs = r.getCities()
+        y1=[]
+        y2={}
+
+        for city in cf+cb+cs:
+            bike = data.loc[data['Stadt'] == city+", Car"]
+            y2[city]=float(bike["Länge total in m"])/1000
+
+        y2={k: v for k, v in sorted(y2.items(), key=lambda item: item[1])}
+
+        for city in y2.keys():
+            bike = data.loc[data['Stadt'] == city+", Car"]
+            y1.append(float(bike["Länge einzeln in m"])/1000)
+
+        pl.plotDoubleBar(y2.keys(),list(y2.values()), y1, "Kanten- und Strassenlänge", ["Kantenlänge", "Strassenlänge"], plot_y="l [km]", rotate_x=True, line_width=0.4, margin=0.4)
+
 s = Statistics()
-s.byEdgelength()
+s.byDensity()
 
 
