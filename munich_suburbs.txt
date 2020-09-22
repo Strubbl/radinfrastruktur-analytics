@@ -1,0 +1,25 @@
+Stadtbezirk 1 Altstadt-Lehel
+Stadtbezirk 2 Ludwigsvorstadt-Isarvorstadt
+Stadtbezirk 3 Maxvorstadt
+Stadtbezirk 4 Schwabing-West
+Stadtbezirk 5 Au-Haidhausen
+Stadtbezirk 6 Sendling
+Stadtbezirk 7 Sendling-Westpark
+Stadtbezirk 8 Schwanthalerhöhe
+Stadtbezirk 9 Neuhausen-Nymphenburg
+Stadtbezirk 10 Moosach
+Stadtbezirk 11 Milbertshofen-Am Hart
+Stadtbezirk 12 Schwabing-Freimann
+Stadtbezirk 13 Bogenhausen
+Stadtbezirk 14 Berg am Laim
+Stadtbezirk 15 Trudering-Riem
+Stadtbezirk 16 Ramersdorf-Perlach
+Stadtbezirk 17 Obergiesing
+Stadtbezirk 18 Untergiesing-Harlaching
+Stadtbezirk 19 Thalkirchen-Obersendling-Forstenried-Fürstenried-Solln
+Stadtbezirk 20 Hadern
+Stadtbezirk 21 Pasing-Obermenzing
+Stadtbezirk 22 Aubing-Lochhausen-Langwied
+Stadtbezirk 23 Allach-Untermenzing
+Stadtbezirk 24 Feldmoching-Hasenbergl
+München

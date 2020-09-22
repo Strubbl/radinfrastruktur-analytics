@@ -103,23 +103,23 @@ class OsmCalc():
         else:
             fig, ax = ox.plot_graph(G)
             
-    def writeCsv(self, data):
-        with open('cities.csv', 'a+') as csvfile:
+    def writeCsv(self, data, filepath='cities.csv'):
+        with open(filepath, 'a+') as csvfile:
             spamwriter = csv.writer(csvfile, delimiter=';',
                                      quoting=csv.QUOTE_MINIMAL)
             spamwriter.writerow(data)
 
-curr_date = datetime.date.today().strftime("%Y-%m-%d")
-            
-o = OsmCalc()
 
-for city in cities:
-    cityname = city["city"]
-    filename = "images" + os.sep + cityname + "_" + curr_date
-    G_bike = o.getBike(city)
-    G_car = o.getCar(city)
-    G = nx.compose(G_car, G_bike)
-    o.writeCsv([cityname + " Bike"]+list(o.calcStats(G_bike, city).values()))
-    o.writeCsv([cityname + " Car"]+list(o.calcStats(G_car, city).values()))
-    o.plotG(G, save=True, filepath=filename+".png", colored=True)
+if __name__ == "__main__":
+    curr_date = datetime.date.today().strftime("%Y-%m-%d")
+    o = OsmCalc()
+    for city in cities:
+        cityname = city["city"]
+        filename = "images" + os.sep + cityname + "_" + curr_date
+        G_bike = o.getBike(city)
+        G_car = o.getCar(city)
+        G = nx.compose(G_car, G_bike)
+        o.writeCsv([cityname + " Bike"]+list(o.calcStats(G_bike, city).values()))
+        o.writeCsv([cityname + " Car"]+list(o.calcStats(G_car, city).values()))
+        o.plotG(G, save=True, filepath=filename+".png", colored=True)
 

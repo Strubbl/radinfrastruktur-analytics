@@ -3,4 +3,4 @@ cache/
 data/
 images/
 
-/cities.csv
+/cities*.csv
