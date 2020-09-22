@@ -1,6 +1,8 @@
-import osmnx as ox
-import networkx as nx
 import csv
+import datetime
+import networkx as nx
+import os
+import osmnx as ox
 
 class OsmCalc():
     def getBike(self, place):
@@ -57,7 +59,7 @@ class OsmCalc():
         return G
 
     def calcStats(self, G, city):
-        gdf = ox.gdf_from_place(city)
+        gdf = ox.geocode_to_gdf(city)
         area = ox.project_gdf(gdf).unary_union.area
         stats = ox.stats.basic_stats(G, area=area)
         stat = {}
@@ -105,14 +107,17 @@ class OsmCalc():
                                      quoting=csv.QUOTE_MINIMAL)
             spamwriter.writerow(data)
 
-cities=[{"city": "Hamburg"}]            
+cities = ['Barth', 'Binz', 'Greifswald', 'Heilbronn', 'Hildesheim', 'Kiel', 'Mainz', 'München', 'Neubrandenburg', 'Rostock', 'Schwäbisch Gmünd', 'Stralsund', 'Suhl', "Wentorf bei Hamburg"]
+curr_date = datetime.date.today().strftime("%Y-%m-%d")
             
 o = OsmCalc()
 
 for city in cities:
+    filename = "images" + os.pathsep + str(city.split(",")[0]) + "_" + curr_date
     G_bike = o.getBike(city)
     G_car = o.getCar(city)
     G = nx.compose(G_car, G_bike)
-    #o.writeCsv([str(city.split(",")[0])+" Bike"]+list(o.calcStats(G_bike, city).values()))
-    #o.writeCsv([str(city.split(",")[0])+" Car"]+list(o.calcStats(G_car, city).values()))
-    o.plotG(G, save=True, filepath=str(city.split(",")[0])+".png", colored=True)
+    o.writeCsv([str(city.split(",")[0])+" Bike"]+list(o.calcStats(G_bike, city).values()))
+    o.writeCsv([str(city.split(",")[0])+" Car"]+list(o.calcStats(G_car, city).values()))
+    o.plotG(G, save=True, filepath=filename+".png", colored=True)
+
