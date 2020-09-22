@@ -5,7 +5,6 @@ cities = [
         {'city': 'Hamburg', 'country': 'Deutschland'},
         {'city': 'Heilbronn', 'country': 'Deutschland'},
         {'city': 'Hildesheim', 'country': 'Deutschland'},
-        {'city': 'München', 'country': 'Deutschland'},
         {'city': 'Kiel', 'country': 'Deutschland'},
         {'city': 'Mainz', 'country': 'Deutschland'},
         {'city': 'München', 'country': 'Deutschland'},
