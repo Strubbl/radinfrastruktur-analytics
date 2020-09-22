@@ -132,7 +132,7 @@ class Reader():
 
         return y_1, y_2, y_3, self.data
 
-r = Reader("data/cities.csv")
+r = Reader("cities.csv")
 
 class Statistics():
     def byRatio(self):
