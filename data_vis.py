@@ -3,8 +3,6 @@ import os
 import matplotlib.pylab as plt
 import numpy as np
 
-os.chdir("C:/github_repos/Radinfrastruktur-analytics")
-
 class Plotter():
 
     def plotBar(self, x, y, title, color=(0.2,0.4,0.9,1), plot_y=False, line_width=1, rotate_x=False, fully_rotate_x=False, margin=0.5, height_scale=1.1):
