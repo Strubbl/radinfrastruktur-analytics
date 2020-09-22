@@ -7,6 +7,9 @@ import osmnx as ox
 from cities import cities
 
 class OsmCalc():
+    def __init__(self, dpi=1200):
+        self.dpi = dpi
+
     def getBike(self, place):
         useful_tags = ox.settings.useful_tags_way + ['cycleway'] + ['bicycle'] + ['oneway'] + ['bicycle:lanes'] + ['cycleway:right'] + ['cycleway:left'] + ['bicycle_road']
         ox.utils.config(use_cache=True, log_console=True, useful_tags_way=useful_tags)
@@ -99,7 +102,7 @@ class OsmCalc():
                     ec.append('#3366e6')
                 else:
                     ec.append('#d4d4d4')
-            fig, ax = ox.plot_graph(G, edge_color=ec, save=save, show=True, filepath=filepath, node_color='#7d7d7d', edge_alpha=0.6, node_size=0, figsize=(37.5590551,18.7795276), dpi=1200, bgcolor="#FFFFFF", edge_linewidth=3)
+            fig, ax = ox.plot_graph(G, edge_color=ec, save=save, show=True, filepath=filepath, node_color='#7d7d7d', edge_alpha=0.6, node_size=0, figsize=(37.5590551,18.7795276), dpi=self.dpi, bgcolor="#FFFFFF", edge_linewidth=3)
         else:
             fig, ax = ox.plot_graph(G)
             
